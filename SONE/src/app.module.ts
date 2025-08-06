@@ -13,12 +13,14 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './services/JwtStrategy';
 import { KuroModule } from './kuro/kuro.module';
 import { SocketModule } from './socket/socket.module';
-import { KeeperModule } from './keeper/keeper.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
-  imports: [AuthModule, PointModule,SharedModelModule,
-    ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env']}),
+  imports: [
+    AuthModule,
+    PointModule,
+    SharedModelModule,
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env'] }),
     EventEmitterModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -39,7 +41,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       inject: [ConfigService],
       global: true,
     }),
-    KeeperModule,
     KuroModule,
     SocketModule,
   ],
@@ -47,14 +48,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   providers: [AppService, PointService, JwtStrategy],
 })
 export class AppModule implements OnModuleInit {
-
-  async onModuleInit() {
-
-  }
+  async onModuleInit() {}
 
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CustomHeaderMiddleware)
-      .forRoutes("*");
+    consumer.apply(CustomHeaderMiddleware).forRoutes('*');
   }
 }
